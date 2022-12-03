@@ -20,7 +20,9 @@ class AddToCart:
     add_to_cart_button = '//a[text()="הוספה לסל"]'
     pagination = '//*[text()="הבא →"]'
     pagination2 = '//ul[@class="dokan-pagination"]/li[last()]/a'
-    cart = '//div[@class="xoo-wsc-basket active"]'
+    cart_loading = '//div[@class="xoo-wsc-basket active"]'
+    cart_not_loading = '//div[@class="xoo-wsc-basket"]'
+    checkout_btn = '//a[@class="xoo-wsc-ft-btn xoo-wsc-cart "]'
     checkout_url = "https://ashdod.shop/checkout/"
 
     def __init__(self, page: Page, url: str):
@@ -40,12 +42,18 @@ class AddToCart:
                     self.page.locator(self.pagination).click(timeout=3000)
                 except Exception as e:
                     print(f"Error:{e}\n\nmessage: No -add to cart- button on {self.url}")
-                    raise Exception("No -add to cart- button")
+                    raise Exception
                 else:
                     continue
 
     def go_to_checkout(self):
-        self.page.wait_for_selector(self.cart, timeout=5000)
+        self.page.wait_for_selector(self.cart_loading, timeout=5000)
+        self.page.wait_for_selector(self.cart_not_loading, timeout=5000)
+
+        # self.page.query_selector_all(self.cart_not_loading)[0].click()
+        # self.page.wait_for_selector(self.checkout_btn, timeout=3000)
+        # self.page.query_selector_all(self.checkout_btn)[0].click()
+
         self.page.goto(self.checkout_url)
 
     def run_page(self):
@@ -109,7 +117,7 @@ class PaymentPage:
         self.page = page
 
     def run_page(self):
-        self.page.wait_for_selector(self.payment_tag, timeout=20000)
+        self.page.wait_for_selector(self.payment_tag, timeout=10000)
         self.page.reload()
         frame = self.page.frame("chekout_frame")
 
@@ -117,4 +125,4 @@ class PaymentPage:
             frame.get_by_role("button").click(timeout=2000)
         except Exception as e:
             print(f"error: {e}\n\nmessage: Payment Page Error!")
-            raise Exception("Payment Page Error!")
+            raise Exception

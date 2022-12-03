@@ -11,7 +11,6 @@ class Bot:
     def __init__(self, page: Page):
         self.page = page
         self.url = None
-        self.error = None
 
     def run_url(self):
         try:
@@ -19,12 +18,10 @@ class Bot:
             CheckOut(page=self.page).run_page()
             PaymentPage(page=self.page).run_page()
         except Exception as e:
-            self.error = e
-            raise Exception
-
-    def get_screenshot(self):
-        shop = self.url.split("/")[-2]
-        self.page.screenshot(path=f"{MAIN_FOLDER}/{shop}.png", full_page=True)
+            shop = self.url.split("/")[-2]
+            self.page.screenshot(path=f"{MAIN_FOLDER}/{shop}.png", full_page=True)
+            print("\nScreenshot was created!\n")
+            raise Exception(e)
 
 
 def get_urls() -> list[str]:
@@ -56,10 +53,6 @@ def setup(page):
     yield bot
 
     print("\n******** TEARDOWN ********")
-    if bot.error:
-        bot.get_screenshot()
-        print("\nScreenshot was created!")
-
     bot.page.close()
 
 
