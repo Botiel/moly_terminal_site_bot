@@ -25,12 +25,10 @@ class AddToCart:
     checkout_btn = '//a[@class="xoo-wsc-ft-btn xoo-wsc-cart "]'
     checkout_url = "https://ashdod.shop/checkout/"
 
-    def __init__(self, page: Page, url: str):
+    def __init__(self, page: Page):
         self.page = page
-        self.url = url
 
     def search_for_add_button(self):
-        self.page.goto(self.url)
 
         while True:
             add_buttons = self.page.query_selector_all(self.add_to_cart_button)
@@ -41,7 +39,7 @@ class AddToCart:
                 try:
                     self.page.locator(self.pagination).click(timeout=3000)
                 except Exception as e:
-                    print(f"Error:{e}\n\nmessage: No -add to cart- button on {self.url}")
+                    print(f"Error:{e}\n\nmessage: No -add to cart- button")
                     raise Exception
                 else:
                     continue
@@ -72,6 +70,7 @@ class CheckOut:
     city = '//*[@name="billing_city"]'
     phone = '//*[@name="billing_phone"]'
     email = '//*[@name="billing_email"]'
+    checkout_form_element = '//table[@class="shop_table woocommerce-checkout-review-order-table"]'
     terms = '//input[@id="terms"]'
     store_terms = '//input[@id="store-terms"]'
     shipping = '//input[@class="shipping_method"]'
@@ -93,10 +92,11 @@ class CheckOut:
         self.page.fill(self.phone, "0584444444")
         self.page.fill(self.email, "test@test.io")
 
+        self.page.wait_for_selector(self.checkout_form_element, timeout=3000)
         try:
             # Shipping method
             locator = self.page.query_selector_all(self.shipping)
-            locator[0].click(timeout=5000)
+            locator[0].click(timeout=3000)
         except Exception:
             pass
 

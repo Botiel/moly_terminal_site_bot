@@ -1,13 +1,13 @@
 import sys
-import os
+from os.path import dirname, abspath
 from datetime import datetime
 
-CURR_DIR = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.abspath(os.path.join(CURR_DIR, '../')))
+d = dirname(dirname(abspath(__file__)))
+sys.path.append(d)
 ROOT_DIR = sys.path[-1]
 
 # CREATING TEST FOLDER
-FULL_TIMESTAMP = datetime.now().strftime('%Y%m%d_%H%M%S')
-DATE_TIMESTAMP = datetime.now().strftime('%Y%m%d')
+FULL_TIMESTAMP = datetime.now().strftime('%d-%m-%Y_%H-%M-%S')
+DATE_TIMESTAMP = datetime.now().strftime('%d-%m-%Y')
 MAIN_FOLDER = f"{ROOT_DIR}/pytest_reports/{DATE_TIMESTAMP}"
 
