@@ -2,7 +2,7 @@ import pytest
 from test_cases_pytest.conftest import get_urls
 
 
-URL_LIST = get_urls()[:5]
+URL_LIST = get_urls()
 
 
 @pytest.mark.parametrize("url", URL_LIST)
